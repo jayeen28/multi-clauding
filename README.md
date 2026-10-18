@@ -12,8 +12,7 @@ every account sees the same configuration while keeping its own login.
 ## Install
 
 ```bash
-git clone <this repo> multi-clauding
-cd multi-clauding
+curl -fsSLO https://raw.githubusercontent.com/jayeen28/multi-clauding/main/claude-account.sh
 chmod +x claude-account.sh
 ```
 
