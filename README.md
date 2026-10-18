@@ -11,6 +11,16 @@ every account sees the same configuration while keeping its own login.
 
 ## Install
 
+Straight from the web, no download:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/jayeen28/multi-clauding/main/claude-account.sh | bash -s -- work research client
+```
+
+`-s --` is what passes your account names through the pipe to the script.
+
+Or keep a copy, which is worth doing — the script is meant to be re-run:
+
 ```bash
 curl -fsSLO https://raw.githubusercontent.com/jayeen28/multi-clauding/main/claude-account.sh
 chmod +x claude-account.sh

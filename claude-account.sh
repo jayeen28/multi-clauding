@@ -1,26 +1,9 @@
 #!/usr/bin/env bash
 #
-# claude-account.sh - give yourself extra Claude Code accounts that all share
-# one set of settings, skills, commands and chat history.
+# claude-account.sh - extra Claude Code accounts that all share one set of
+# settings, skills, commands and chat history. Run with --help for the details.
 #
-#   ./claude-account.sh work research client
-#
-# For each name it:
-#   1. makes the folder ~/.claude-<name>
-#   2. links the shared parts of it back to your main ~/.claude
-#   3. adds the alias  c<name>  to your shell file
-#
-# Then `cwork` starts Claude Code on that account. Each account keeps its own
-# login, so you can be signed in to all of them at the same time.
-#
-# Run it again any time. It changes nothing that is already correct, and it puts
-# back any link that Claude Code has overwritten with a real file.
-#
-# Options:
-#   --no-alias    just the folder and the links, do not touch the shell file
-#   --dry-run     show what it would do, change nothing
-#   --list        show the accounts you already have
-#   -h, --help    this text
+# Safe to pipe:  curl -fsSL <url> | bash -s -- work research client
 
 set -uo pipefail
 
@@ -48,7 +31,30 @@ step() { printf '  %s\n' "$*"; }
 die()  { printf 'Stopped: %s\n' "$*" >&2; exit 1; }
 run()  { if [ "$DRY" = 1 ]; then printf '  would: %s\n' "$*"; else "$@"; fi; }
 
-usage() { sed -n '3,23p' "$0" | sed 's|^# \{0,1\}||'; }
+usage() { cat <<'EOF'
+claude-account.sh - give yourself extra Claude Code accounts that all share
+one set of settings, skills, commands and chat history.
+
+  ./claude-account.sh work research client
+
+For each name it:
+  1. makes the folder ~/.claude-<name>
+  2. links the shared parts of it back to your main ~/.claude
+  3. adds the alias  c<name>  to your shell file
+
+Then `cwork` starts Claude Code on that account. Each account keeps its own
+login, so you can be signed in to all of them at the same time.
+
+Run it again any time. It changes nothing that is already correct, and it puts
+back any link that Claude Code has overwritten with a real file.
+
+Options:
+  --no-alias    just the folder and the links, do not touch the shell file
+  --dry-run     show what it would do, change nothing
+  --list        show the accounts you already have
+  -h, --help    this text
+EOF
+}
 
 list_accounts() {
   local found=0 d
@@ -182,7 +188,7 @@ for name in "${NAMES[@]}"; do
   if [ ! -d "$HOME/.claude-$name" ] && [ -d "$HOME/.claude-${name#c}" ] && [ "$name" != "${name#c}" ]; then
     say ""
     say "Skipped $name. You already have .claude-${name#c}."
-    say "  Give the name, not the alias:  $(basename "$0") ${name#c}"
+    say "  Give the name, not the alias:  claude-account.sh ${name#c}"
     continue
   fi
 
